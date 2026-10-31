@@ -26,7 +26,7 @@ TXT
 cp "build/$NAME.app/Contents/Resources/AppIcon.icns" "$STAGE/.VolumeIcon.icns"
 OUT="build/MantraMIDITools-$V.dmg"; rm -f "$OUT" build/tmp.dmg
 hdiutil create -quiet -volname "Mantra MIDI Tools $V" -srcfolder "$STAGE" -fs HFS+ -format UDRW build/tmp.dmg
-D=$(hdiutil attach -nobrowse -noverify -noautoopen build/tmp.dmg | awk '/\/Volumes\//{print $3" "$4" "$5" "$6}' | sed 's/ *$//')
+D=$(hdiutil attach -nobrowse -noverify -noautoopen build/tmp.dmg | awk -F'\t' '/\/Volumes\//{print $NF}')
 command -v SetFile >/dev/null && SetFile -a C "$D" || true
 hdiutil detach -quiet "$D"
 hdiutil convert -quiet build/tmp.dmg -format UDZO -imagekey zlib-level=9 -o "$OUT"; rm -f build/tmp.dmg
