@@ -1,0 +1,3 @@
+build/
+site/public/*.dmg
+.DS_Store
