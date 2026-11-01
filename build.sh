@@ -1,10 +1,10 @@
 #!/bin/sh
-# build.sh: Mantra MIDI Tools.app (MIDI to MK Control + MIDI to Key Stroke, out of Ableton Live Actions, 31.10.2026),
+# build.sh: MIDI Tools (Mantra).app (MIDI to MK Control + MIDI to Key Stroke, out of Ableton Live Actions, 31.10.2026),
 # swiftc straight, no Xcode, Apple Silicon + Intel, signed "Mantra Apps". The version is the one number in app/Common.swift.
 set -e
 cd "$(dirname "$0")"
 V=$(sed -n 's/^let VERSION = \([0-9]*\)/\1/p' app/Common.swift)
-NAME="Mantra MIDI Tools"
+NAME="MIDI Tools (Mantra)"
 APP="build/$NAME.app"
 rm -rf "$APP"; mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 swiftc -O -swift-version 5 -parse-as-library -target arm64-apple-macos14.0 -o build/MidiTools-arm64 app/*.swift

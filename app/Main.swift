@@ -1,4 +1,4 @@
-// Mantra MIDI Tools: one app for everything that fits Ableton Live to Marko's hands. Marko, 13.10.2026:
+// MIDI Tools (Mantra): one app for everything that fits Ableton Live to Marko's hands. Marko, 13.10.2026:
 // "Same principle as Davinci Resolve: we need to create Ableton Live actions. Right now everything what's related to
 // Ableton Live can be under the same roof." The modules (Module.swift) are switched on and off here; each has its
 // section in the window, its rows in the menu-bar menu, and its hot keys, live only while Live is in front.
@@ -21,7 +21,7 @@ final class Umbrella: NSObject, ObservableObject, NSMenuDelegate {
         let saved = SETTINGS.read()["modules"] as? [String: Bool] ?? [:]
         for m in MODULES { on[m.id] = saved[m.id] ?? m.defaultOn }
         let menu = NSMenu(); menu.delegate = self; item.menu = menu
-        item.button?.title = "MIDI"; item.button?.toolTip = "Mantra MIDI Tools: MIDI to MK Control and MIDI to Key Stroke"
+        item.button?.title = "MIDI"; item.button?.toolTip = "MIDI Tools (Mantra): MIDI to MK Control and MIDI to Key Stroke"
         for m in MODULES where on[m.id]! { m.setOn(true) }
         let nc = NSWorkspace.shared.notificationCenter
         nc.addObserver(forName: NSWorkspace.didLaunchApplicationNotification, object: nil, queue: .main) { [weak self] n in
@@ -59,7 +59,7 @@ final class Umbrella: NSObject, ObservableObject, NSMenuDelegate {
     }
     @objc func showSettings() {
         NSApp.activate(ignoringOtherApps: true)
-        if let w = NSApp.windows.first(where: { $0.title.contains("Mantra MIDI Tools") && ($0.isVisible || $0.isMiniaturized) }) {
+        if let w = NSApp.windows.first(where: { $0.title.contains("MIDI Tools (Mantra)") && ($0.isVisible || $0.isMiniaturized) }) {
             w.deminiaturize(nil); w.makeKeyAndOrderFront(nil)
         } else {
             NSWorkspace.shared.open(Bundle.main.bundleURL)   // the window was closed: a reopen makes it again
@@ -180,7 +180,7 @@ final class Delegate: NSObject, NSApplicationDelegate {
 @main struct AbletonLiveActions: App {
     @NSApplicationDelegateAdaptor(Delegate.self) var delegate
     var body: some Scene {
-        WindowGroup("Mantra MIDI Tools") { SettingsView(u: UMBRELLA) }
+        WindowGroup("MIDI Tools (Mantra)") { SettingsView(u: UMBRELLA) }
             .windowResizability(.contentMinSize).defaultSize(width: 820, height: 820)
     }
 }

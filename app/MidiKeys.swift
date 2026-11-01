@@ -1,6 +1,6 @@
 // MIDI TO KEY STROKE, the module (Marko, 20.9.2026: "First column of the table is CC ... second column is a value,
 // and third column is a key on the keyboard ... add a special case system volume"). The engine is MidiKeysEngine.swift;
-// this is its place in Mantra MIDI Tools: on/off, the menu rows, and the section of the window, which is what the
+// this is its place in MIDI Tools (Mantra): on/off, the menu rows, and the section of the window, which is what the
 // page at :8853 and the separate "MIDI to Key Stroke" window were (MANTRA_CONTROLS), now one face, no server.
 // `--midikeys-dry` opens the section in a window of its own with the engine listening and pressing nothing (a test).
 import SwiftUI
@@ -131,7 +131,7 @@ struct KSSection: View {
                     .help(e.on ? "sending: press to stop everything, the table is kept" : "stopped: press to send again")
             }
             if !e.trusted && !e.dry {
-                Text("Accessibility: not allowed yet. System Settings \u{2192} Privacy & Security \u{2192} Accessibility \u{2192} Mantra MIDI Tools on. Until then no key is pressed and no key can be captured.")
+                Text("Accessibility: not allowed yet. System Settings \u{2192} Privacy & Security \u{2192} Accessibility \u{2192} MIDI Tools (Mantra) on. Until then no key is pressed and no key can be captured.")
                     .font(.system(size: 11)).foregroundColor(AMBER).fixedSize(horizontal: false, vertical: true)
             }
             KSDeviceBand(e: e)

@@ -48,7 +48,7 @@ final class MKMidi {
 
     func start() {
         guard client == 0 else { return }
-        MIDIClientCreateWithBlock("Mantra MIDI Tools · MK Control" as CFString, &client) { [weak self] n in
+        MIDIClientCreateWithBlock("MIDI Tools (Mantra) · MK Control" as CFString, &client) { [weak self] n in
             if n.pointee.messageID == .msgSetupChanged { DispatchQueue.main.async { self?.onSetup?() } }
         }
         MIDIInputPortCreateWithProtocol(client, "MK in" as CFString, ._1_0, &inPort) { [weak self] list, refCon in

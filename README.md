@@ -1,11 +1,11 @@
-# Mantra MIDI Tools
+# MIDI Tools (Mantra)
 
 **Two MIDI tools for the Mac in one menu-bar app, released on their own (31.10.2026):** MIDI TO MK CONTROL (a knob or key
 of any MIDI controller becomes a Mackie Control command in Ableton Live: the playhead under a knob, PLAY / STOP from the
 insert point, 121 commands) and MIDI TO KEY STROKE (a knob's CC or a key's note becomes a key stroke in the front app,
 or the Mac's own volume).
 
-Marko, 31.10.2026: *"make another application called Mantra MIDI Tools ... make it now independent. It's called MIDI to
+Marko, 31.10.2026: *"make another application called MIDI Tools (Mantra) ... make it now independent. It's called MIDI to
 MKEY Protocol, one application, and the other is MIDI to Keyboard."* ("MKEY" = MK Control, Mackie Control.)
 
 - **Website:** https://mantramiditools.pages.dev (`site/public`, `tools/deploy_site.sh`): download with counter

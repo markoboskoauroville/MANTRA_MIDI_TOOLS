@@ -1,4 +1,4 @@
-# TAKEOVER: Mantra MIDI Tools
+# TAKEOVER: MIDI Tools (Mantra)
 
 - 31.10.2026: v1 made from ABLETON_LIVE_ACTIONS v18 (the two MIDI modules), renamed (window, MIDI client names,
   permissions text), its own settings file, menu-bar title MIDI, version link to the website. Typecheck clean, built

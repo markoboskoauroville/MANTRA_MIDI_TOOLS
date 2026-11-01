@@ -45,7 +45,7 @@ struct PermissionsWord: View {
                 .padding(.horizontal, 6).padding(.vertical, 4).contentShape(Rectangle())
                 .onTapGesture { Permissions.openMissing() }
                 .axButton("Permissions", id: "permissions") { Permissions.openMissing() }
-                .help("A permission is missing: this opens its page in System Settings; switch Mantra MIDI Tools on there")
+                .help("A permission is missing: this opens its page in System Settings; switch MIDI Tools (Mantra) on there")
         }
     }
 }

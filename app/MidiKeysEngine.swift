@@ -396,7 +396,7 @@ final class KSEngine: ObservableObject {
     func midiStart() {
         midiStop()
         if client == 0 {
-            MIDIClientCreateWithBlock("Mantra MIDI Tools: MIDI to Key Stroke" as CFString, &client) { [weak self] note in
+            MIDIClientCreateWithBlock("MIDI Tools (Mantra): MIDI to Key Stroke" as CFString, &client) { [weak self] note in
                 if note.pointee.messageID == .msgSetupChanged { DispatchQueue.main.async { self?.checkSources() } }
             }
             MIDIOutputPortCreate(client, "MIDI to Key Stroke out" as CFString, &outPort)
@@ -553,7 +553,7 @@ final class KSEngine: ObservableObject {
 
     func postKey(_ name: String, _ mods: [String]) {
         guard !dry, let code = KS_KEYS[name] else { if KS_KEYS[name] == nil { note("no key code for \"\(name)\"") }; return }
-        guard AXIsProcessTrusted() else { note("not pressed: Accessibility is not allowed for Mantra MIDI Tools yet"); return }
+        guard AXIsProcessTrusted() else { note("not pressed: Accessibility is not allowed for MIDI Tools (Mantra) yet"); return }
         let f = ksFlags(mods)
         for down in [true, false] {
             let e = CGEvent(keyboardEventSource: nil, virtualKey: code, keyDown: down); e?.flags = f; e?.post(tap: .cghidEventTap)
@@ -605,7 +605,7 @@ final class KSEngine: ObservableObject {
             let code = CGKeyCode(ev.getIntegerValueField(.keyboardEventKeycode)), flags = ev.flags
             DispatchQueue.main.async { eng.captured(code, flags) }
             return nil                                   // swallowed: the key he pressed does nothing else
-        }, userInfo: me) else { note("the key cannot be captured: allow Accessibility for Mantra MIDI Tools"); return }
+        }, userInfo: me) else { note("the key cannot be captured: allow Accessibility for MIDI Tools (Mantra)"); return }
         capSource = CFMachPortCreateRunLoopSource(nil, t, 0)
         CFRunLoopAddSource(CFRunLoopGetMain(), capSource, .commonModes); CGEvent.tapEnable(tap: t, enable: true)
         capTap = t; capId = id

@@ -4,14 +4,14 @@
 set -e
 cd "$(dirname "$0")/.."
 V=$(sed -n 's/^let VERSION = \([0-9]*\)/\1/p' app/Common.swift)
-NAME="Mantra MIDI Tools"
+NAME="MIDI Tools (Mantra)"
 STAGE=build/dmg; rm -rf "$STAGE"; mkdir -p "$STAGE"
 cp -R "build/$NAME.app" "$STAGE/"
 ln -s /Applications "$STAGE/Applications"
 cat > "$STAGE/Read me first.txt" <<TXT
-Mantra MIDI Tools $V  —  https://mantramiditools.pages.dev
+MIDI Tools (Mantra) $V  —  https://mantramiditools.pages.dev
 
-1. Drag "Mantra MIDI Tools" onto the Applications folder.
+1. Drag "MIDI Tools (Mantra)" onto the Applications folder.
 2. Open it. The first time, macOS says it cannot check the app, because it is signed by its author and not through
    Apple's paid program. Open System Settings > Privacy & Security, scroll down, and press "Open Anyway".
 3. Allow Accessibility (System Settings > Privacy & Security > Accessibility): MIDI to Key Stroke presses keys in the
@@ -25,7 +25,7 @@ Free to use. If it helps you, put something in the bowl on the website.
 TXT
 cp "build/$NAME.app/Contents/Resources/AppIcon.icns" "$STAGE/.VolumeIcon.icns"
 OUT="build/MantraMIDITools-$V.dmg"; rm -f "$OUT" build/tmp.dmg
-hdiutil create -quiet -volname "Mantra MIDI Tools $V" -srcfolder "$STAGE" -fs HFS+ -format UDRW build/tmp.dmg
+hdiutil create -quiet -volname "MIDI Tools (Mantra) $V" -srcfolder "$STAGE" -fs HFS+ -format UDRW build/tmp.dmg
 D=$(hdiutil attach -nobrowse -noverify -noautoopen build/tmp.dmg | awk -F'\t' '/\/Volumes\//{print $NF}')
 command -v SetFile >/dev/null && SetFile -a C "$D" || true
 hdiutil detach -quiet "$D"

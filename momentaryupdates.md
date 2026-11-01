@@ -16,4 +16,4 @@
 ## 1.11.2026: no Mantra at the beginning of the name
 > "second point, please look at the screenshot at the top. I have applications which have Mantra at the beginning, right? In the manifest, the Mantra manifest never ever names apps with Mantra at the beginning. Mantra always comes at the end in parentheses, and in the beginning is a normal name of the app without the Mantra prefix Which means you need to go through all my apps, and anything called Mantra at the beginning should be renamed."
 
-**Status:** in progress.
+**Status:** v2 (1.11.2026): the app is now MIDI Tools (Mantra).app, built and installed; bundle id kept (Accessibility stays); the old copy removed. The site text and the dmg script carry the new name; the public dmg and site are not re-released yet (asked Marko).

@@ -1,10 +1,10 @@
-// What every part of Mantra MIDI Tools shares: the colours and words of the CAMERA language, the state files,
+// What every part of MIDI Tools (Mantra) shares: the colours and words of the CAMERA language, the state files,
 // Live itself, Python, keys and hot keys.
 import SwiftUI
 import AppKit
 import Carbon.HIToolbox
 
-let VERSION = 1
+let VERSION = 2
 let RELEASES = "https://mantramiditools.pages.dev"
 let BUNDLE = "com.ableton.live"
 let PYTHON = NSHomeDirectory() + "/.pyenv/versions/3.10.14/bin/python3"
@@ -45,7 +45,7 @@ extension View {
 // TOP (Marko, 31.10.2026: "Each needs to have the same user interface elements. On, off and top."): green = the
 // window stays above every other window; remembered in UserDefaults "onTop" and applied at launch
 func floatWindows(_ on: Bool) {
-    for w in NSApp.windows where w.title.hasPrefix("Mantra MIDI Tools") { w.level = on ? .floating : .normal }
+    for w in NSApp.windows where w.title.hasPrefix("MIDI Tools (Mantra)") { w.level = on ? .floating : .normal }
 }
 // ✕, the window's close at its far upper-right corner (Marko, 19.10.2026: "please unify the position of the close
 // button on every application. It's far upper right corner. There is X to close the dialog in every dialog, same").
