@@ -12,7 +12,7 @@ MKEY Protocol, one application, and the other is MIDI to Keyboard."* ("MKEY" = M
   (`data-dl-app="miditools"`), install steps (Open Anyway; IAC Driver + Live's MackieControl surface; AbletonOSC
   optional), the donation bowl, visits, Speechify keys.
 - **Build:** `./build.sh` (Apple Silicon + Intel, signed "Mantra Apps", installs to /Applications), `tools/make_dmg.sh`
-  → `build/MantraMIDITools-<v>.dmg`. The version is the one number in `app/Common.swift`.
+  → `build/MIDIToolsMantra-<v>.dmg`. The version is the one number in `app/Common.swift`.
 - **Code:** the MIDI to MK Control and MIDI to Key Stroke modules of ABLETON_LIVE_ACTIONS (v18), copied with
   Module.swift, Common.swift, Permissions.swift, Ports.swift and the umbrella (Main.swift) holding only these two.
   Settings in `~/.config/midi-tools.json` (Live Actions keeps `live-actions.json`). MIDI in the menu bar.

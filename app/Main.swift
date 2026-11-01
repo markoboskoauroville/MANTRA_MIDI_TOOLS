@@ -22,7 +22,7 @@ final class Umbrella: NSObject, ObservableObject, NSMenuDelegate {
         for m in MODULES { on[m.id] = saved[m.id] ?? m.defaultOn }
         let menu = NSMenu(); menu.delegate = self; item.menu = menu
         item.button?.title = "MIDI"; item.button?.toolTip = "MIDI Tools (Mantra): MIDI to MK Control and MIDI to Key Stroke"
-        for m in MODULES where on[m.id]! { m.setOn(true) }
+        for m in MODULES where on[m.id]! && !SHOT { m.setOn(true) }   // --shot only draws: nothing runs
         let nc = NSWorkspace.shared.notificationCenter
         nc.addObserver(forName: NSWorkspace.didLaunchApplicationNotification, object: nil, queue: .main) { [weak self] n in
             guard (n.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication)?.bundleIdentifier == BUNDLE else { return }
@@ -120,7 +120,7 @@ struct SettingsView: View {
         // the top of every user interface, there will now be an on/off switch". Running is ON; OFF stops every module
         // (applicationWillTerminate) and quits. ✕ closes the window only.
         HStack(spacing: 0) {
-            Text("MANTRA MIDI TOOLS").font(.system(size: 12, weight: .bold, design: .monospaced)).foregroundColor(.white).padding(.trailing, 6)
+            Text("MIDI TOOLS (MANTRA)").font(.system(size: 12, weight: .bold, design: .monospaced)).foregroundColor(.white).padding(.trailing, 6)
             Word(text: "ON", on: true) {}
             Word(text: "OFF", on: false, action: { NSApp.terminate(nil) }, id: "off")
             Spacer()
@@ -177,10 +177,40 @@ final class Delegate: NSObject, NSApplicationDelegate {
     func applicationWillTerminate(_ n: Notification) { for m in MODULES { m.setOn(false) } }
 }
 
-@main struct AbletonLiveActions: App {
+struct AbletonLiveActions: App {
     @NSApplicationDelegateAdaptor(Delegate.self) var delegate
     var body: some Scene {
         WindowGroup("MIDI Tools (Mantra)") { SettingsView(u: UMBRELLA) }
             .windowResizability(.contentMinSize).defaultSize(width: 820, height: 820)
+    }
+}
+
+/// --shot <png> <tab> [w] [h]: the window drawn off screen into a PNG for the website, never shown, no module started
+/// (MANTRA_MANIFEST screenshots-without-his-screen). Tabs: mackie, keys (the module ids).
+let SHOT = CommandLine.arguments.contains("--shot")
+
+@main enum Main {
+    static func main() {
+        let a = CommandLine.arguments
+        guard let i = a.firstIndex(of: "--shot"), i + 2 < a.count else { AbletonLiveActions.main(); return }
+        _ = NSApplication.shared
+        NSApp.setActivationPolicy(.prohibited)
+        NSApp.appearance = NSAppearance(named: .darkAqua)
+        let was = UMBRELLA.tab
+        UMBRELLA.tab = a[i + 2]
+        let w = i + 3 < a.count ? Double(a[i + 3]) ?? 820 : 820, h = i + 4 < a.count ? Double(a[i + 4]) ?? 640 : 640
+        let v = NSHostingView(rootView: SettingsView(u: UMBRELLA))
+        v.frame = NSRect(x: 0, y: 0, width: w, height: h)
+        let win = NSWindow(contentRect: v.frame, styleMask: [.borderless], backing: .buffered, defer: false)
+        win.contentView = v
+        v.layoutSubtreeIfNeeded()
+        RunLoop.main.run(until: Date().addingTimeInterval(0.8))
+        var ok = false
+        if let rep = v.bitmapImageRepForCachingDisplay(in: v.bounds) {
+            v.cacheDisplay(in: v.bounds, to: rep)
+            ok = (try? rep.representation(using: .png, properties: [:])?.write(to: URL(fileURLWithPath: a[i + 1]))) != nil
+        }
+        UMBRELLA.tab = was
+        exit(ok ? 0 : 1)
     }
 }

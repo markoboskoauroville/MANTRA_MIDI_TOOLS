@@ -24,7 +24,7 @@ MIDI Tools (Mantra) $V  —  https://mantramiditools.pages.dev
 Free to use. If it helps you, put something in the bowl on the website.
 TXT
 cp "build/$NAME.app/Contents/Resources/AppIcon.icns" "$STAGE/.VolumeIcon.icns"
-OUT="build/MantraMIDITools-$V.dmg"; rm -f "$OUT" build/tmp.dmg
+OUT="build/MIDIToolsMantra-$V.dmg"; rm -f "$OUT" build/tmp.dmg
 hdiutil create -quiet -volname "MIDI Tools (Mantra) $V" -srcfolder "$STAGE" -fs HFS+ -format UDRW build/tmp.dmg
 D=$(hdiutil attach -nobrowse -noverify -noautoopen build/tmp.dmg | awk -F'\t' '/\/Volumes\//{print $NF}')
 command -v SetFile >/dev/null && SetFile -a C "$D" || true
