@@ -38,6 +38,15 @@
   .card h3 { margin: 0 0 6px; font-size: 18px; }
   .card p { margin: 0; color: var(--dim); font-size: 15px; }
   h2 { font-size: 24px; margin: 0 0 14px; }
+  /* the page order (MANTRA_MANIFEST app-page-order.md): banner, introduction, lifestyle, technical, donation */
+  .banner { position: relative; border-radius: 18px; overflow: hidden; margin: 0 0 28px; background: #000; }
+  .banner > img { display: block; width: 100%; height: auto; aspect-ratio: 1023 / 572; object-fit: cover; }
+  .banner .over { position: absolute; left: 0; right: 0; bottom: 0; padding: 60px 26px 22px;
+                  background: linear-gradient(transparent, rgba(0,0,0,.82)); display: flex; gap: 18px; align-items: center; }
+  .banner .over img { width: 64px; height: 64px; flex: none; }
+  .life { border-radius: 18px; overflow: hidden; margin: 8px 0 44px; }
+  .life img { display: block; width: 100%; height: auto; }
+  @media (max-width: 600px) { h1 { font-size: 28px; } .banner .over { position: static; background: var(--raised); padding: 16px; } }
   ol { padding-left: 22px; margin: 0 0 44px; }
   ol li { margin: 8px 0; }
   code, pre { background: var(--raised); border: 1px solid var(--line); border-radius: 6px; font-size: 15px; }
@@ -72,22 +81,32 @@
 </head>
 <body>
 <main>
-  <header>
-    <img src="icon-512.png" alt="">
-    <div>
-      <h1>MIDI Tools (Mantra)</h1>
-      <div class="by">Two MIDI tools for the Mac · free · by Mantra Productions</div>
+  <!-- 1. the banner: the app at work -->
+  <div class="banner">
+    <img src="img/hero.jpg" alt="A producer's hand turning a knob on a small MIDI controller beside a MacBook with Ableton Live's arrangement open" width="1023" height="572">
+    <div class="over">
+      <img src="icon-512.png" alt="">
+      <div>
+        <h1>MIDI Tools (Mantra)</h1>
+        <div class="by">Two MIDI tools for the Mac · free · by Mantra Productions</div>
+      </div>
     </div>
-  </header>
+  </div>
 
+  <!-- 2. the introduction -->
   <p class="lead">Any MIDI controller you already have, a knob box, a keyboard, a pad, can drive Ableton Live like a
-    Mackie Control surface, or press keys on your Mac. One small app in the menu bar, two tools, each with its own
-    ON and OFF.</p>
+    Mackie Control surface, or press keys on your Mac. Turn a knob and the playhead moves through your song; press a
+    pad and Live plays from where you left it. One small app in the menu bar, two tools, each with its own ON and OFF.</p>
   <div class="actions">
     <a class="btn" href="MIDIToolsMantra-2.dmg" data-dl-app="miditools" download>Download for Mac</a>
   </div>
-  <p class="small">Version 1 · macOS 14 or newer · Apple Silicon and Intel · 1.5 MB</p>
+  <p class="small">Version 2 · macOS 14 or newer · Apple Silicon and Intel · 1.5 MB</p>
 
+  <!-- 3. the lifestyle picture -->
+  <div class="life"><img src="img/lifestyle.jpg" alt="A smiling musician at a wooden desk in a sunlit home studio, playing a small MIDI controller next to his MacBook" width="1023" height="765" loading="lazy"></div>
+
+  <!-- 4. the technical part -->
+  <h2>What it does</h2>
   <div class="grid" style="margin-top:32px">
     <div class="card"><h3>MIDI to MK Control</h3><p>A knob or key becomes a Mackie Control command in Live: the playhead under a knob, PLAY and STOP from the insert point, 121 commands to choose from. Live's own MIDI mapping cannot give you the playhead; this can.</p></div>
     <div class="card"><h3>MIDI to Key Stroke</h3><p>A knob's CC or a key's note becomes a key stroke in whatever app is in front, one key per value. Or make one knob the Mac's own volume, with the Mac's own volume square on the screen.</p></div>
