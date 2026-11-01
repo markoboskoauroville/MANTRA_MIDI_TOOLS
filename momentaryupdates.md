@@ -17,3 +17,9 @@
 > "second point, please look at the screenshot at the top. I have applications which have Mantra at the beginning, right? In the manifest, the Mantra manifest never ever names apps with Mantra at the beginning. Mantra always comes at the end in parentheses, and in the beginning is a normal name of the app without the Mantra prefix Which means you need to go through all my apps, and anything called Mantra at the beginning should be renamed."
 
 **Status:** v2 (1.11.2026): the app is now MIDI Tools (Mantra).app, built and installed; bundle id kept (Accessibility stays); the old copy removed. Released publicly at Marko's "yes, please release MIDI tools" (1.11.2026): MIDIToolsMantra-2.dmg on https://mantramiditools.pages.dev (checked live, 200), the window's top row says MIDI TOOLS (MANTRA), the two site screenshots (which were blank) drawn again off screen with the new --shot mode.
+
+## 1.11.2026: the download link gives each new version by itself
+
+> "yes, fix download links so every website gets each new version by itself" (Marko, 1.11.2026)
+
+**Status:** in progress 1.11.2026 (MANTRA_MANIFEST modules/download-always-latest.md: a fixed address download/<Name>.dmg, filled by build.sh at every new version).
