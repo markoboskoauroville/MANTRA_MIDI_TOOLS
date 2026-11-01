@@ -3,6 +3,9 @@
 # swiftc straight, no Xcode, Apple Silicon + Intel, signed "Mantra Apps". The version is the one number in app/Common.swift.
 set -e
 cd "$(dirname "$0")"
+# ./build.sh               build, install, then publish: DMG + page (download-always-latest.md, 1.11.2026)
+# ./build.sh --no-publish  build and install only
+PUBLISH=1; for a in "$@"; do case "$a" in --no-publish) PUBLISH=0;; esac; done
 V=$(sed -n 's/^let VERSION = \([0-9]*\)/\1/p' app/Common.swift)
 NAME="MIDI Tools (Mantra)"
 APP="build/$NAME.app"
@@ -37,3 +40,10 @@ rm -rf "$APP/Contents/Resources/helpers"; cp -R helpers "$APP/Contents/Resources
 codesign --force -s "Mantra Apps" "$APP"
 rm -rf "/Applications/$NAME.app"; cp -R "$APP" /Applications/
 echo "built $APP (v$V) and installed it in /Applications"
+# the release step: every new version reaches the page in the same run (MANTRA_MANIFEST download-always-latest.md)
+if [ "$PUBLISH" = 1 ]; then
+  tools/make_dmg.sh
+  tools/deploy_site.sh
+else
+  echo "not published (--no-publish)"
+fi

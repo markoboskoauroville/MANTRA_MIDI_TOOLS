@@ -1,3 +1,4 @@
 build/
 site/public/*.dmg
 .DS_Store
+site/public/download/
