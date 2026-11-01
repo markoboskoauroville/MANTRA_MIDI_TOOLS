@@ -30,4 +30,4 @@
 
 1. One centred link "My studio setup" right above the donation bowl, opening https://studiosetupmantra.pages.dev in a new tab, with the line "The gear these apps are made with · affiliate links on Amazon.de".
 
-**Status:** committed 1.11.2026, NOT pushed or deployed: waiting until Marko registers studiosetupmantra.pages.dev in Amazon PartnerNet and the studio page is live.
+**Status:** published 1.11.2026: studiosetupmantra.pages.dev registered in PartnerNet and live with the tag; Marko: "Please publish it."
