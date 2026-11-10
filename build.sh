@@ -37,8 +37,8 @@ cat > "$APP/Contents/Info.plist" <<PL
 </dict></plist>
 PL
 rm -rf "$APP/Contents/Resources/helpers"; cp -R helpers "$APP/Contents/Resources/helpers"
-codesign --force -s "Mantra Apps" "$APP"
-rm -rf "/Applications/$NAME.app"; cp -R "$APP" /Applications/
+codesign --force -s "${SIGN:-Mantra Apps}" "$APP"
+[ -n "$NO_INSTALL" ] || { rm -rf "/Applications/$NAME.app"; cp -R "$APP" /Applications/; }
 echo "built $APP (v$V) and installed it in /Applications"
 # the release step: every new version reaches the page in the same run (MANTRA_MANIFEST download-always-latest.md)
 if [ "$PUBLISH" = 1 ]; then
