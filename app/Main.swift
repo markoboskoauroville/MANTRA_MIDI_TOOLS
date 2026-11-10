@@ -150,6 +150,7 @@ struct SettingsView: View {
                 }
                 if let m = MODULES.first(where: { $0.id == u.tab }) ?? MODULES.first { ModuleSection(u: u, m: m) }
                 HStack { Spacer(); Text("v\(VERSION)").font(.system(size: 11, design: .monospaced)).foregroundColor(GREY).onTapGesture { NSWorkspace.shared.open(URL(string: RELEASES)!) } }
+                Text("© 2026 Mantra Productions").font(.system(size: 11)).foregroundColor(GREY).frame(maxWidth: .infinity, alignment: .center)
             }
             .frame(width: max(200, g.size.width - 48), alignment: .leading)
             .clipped()
