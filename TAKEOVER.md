@@ -26,3 +26,7 @@ changes: **https://mantramiditools.pages.dev/download/MIDITools.dmg**. Nobody ed
 - The check after a release: `curl -sI https://mantramiditools.pages.dev/download/MIDITools.dmg` answers 200 and the page shows
   the new version.
 - 1.11.2026: v2 put behind the fixed address, live checked: 200, the same bytes as build/MIDIToolsMantra-2.dmg (1475952), MIDIToolsMantra-2.dmg and MantraMIDITools-1.dmg → 301, the page says Version 2.
+
+## State at close, 13.11.2026
+
+13.11.2026: audited against the Lua it replaces; first GitHub build of v2 (public repo); it now holds the MK Control (Mackie) and key-stroke engines the star used to load.
