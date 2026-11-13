@@ -31,3 +31,11 @@
 1. One centred link "My studio setup" right above the donation bowl, opening https://studiosetupmantra.pages.dev in a new tab, with the line "The gear these apps are made with · affiliate links on Amazon.de".
 
 **Status:** published 1.11.2026: studiosetupmantra.pages.dev registered in PartnerNet and live with the tag; Marko: "Please publish it."
+
+## 13.11.2026: the last two Hammerspoon rows go to this app
+
+> "If something is not converted, please create agents to convert anything that is still on Hammer Spoon to Swift right now ... one agent per application" (Marko, 13.11.2026)
+
+Audit 13.11.2026 of mackie.lua + MANTRA_MACKIE (mackie, mcu, rules, blob, live) and midikeys.lua + MIDI_TO_KEYSTROKE (midikeys, rules, volume, e16led, tablekeep, midiwatch) against this app: every verb, rule, command id, the blob, Live's lights, the E16 LEDs and the volume path are here; the only Lua parts without a Swift twin are the :8855 / :8853 pages and their HTTP doors, dropped on purpose (the window is the face). The star rows "MIDI to MK Control" and "MIDI to Key Stroke" leave Hammerspoon; this app's row (miditools) opens both. Public repo (three secret checks clean) so GitHub builds it.
+
+**Status:** v2 pushed for the GitHub build; modules ON in ~/.config/midi-tools.json.
