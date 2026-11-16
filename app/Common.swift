@@ -4,7 +4,7 @@ import SwiftUI
 import AppKit
 import Carbon.HIToolbox
 
-let VERSION = 2
+let VERSION = 3
 let RELEASES = "https://mantramiditools.pages.dev"
 let BUNDLE = "com.ableton.live"
 let PYTHON = NSHomeDirectory() + "/.pyenv/versions/3.10.14/bin/python3"

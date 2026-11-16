@@ -39,3 +39,6 @@
 Audit 13.11.2026 of mackie.lua + MANTRA_MACKIE (mackie, mcu, rules, blob, live) and midikeys.lua + MIDI_TO_KEYSTROKE (midikeys, rules, volume, e16led, tablekeep, midiwatch) against this app: every verb, rule, command id, the blob, Live's lights, the E16 LEDs and the volume path are here; the only Lua parts without a Swift twin are the :8855 / :8853 pages and their HTTP doors, dropped on purpose (the window is the face). The star rows "MIDI to MK Control" and "MIDI to Key Stroke" leave Hammerspoon; this app's row (miditools) opens both. Public repo (three secret checks clean) so GitHub builds it.
 
 **Status:** v2 pushed for the GitHub build; modules ON in ~/.config/midi-tools.json.
+
+16.11.2026 (Marko, 16.11.2026): "Please with all my apps on the menu bar, make a comprehensive pop-up menu. When I hover over, I want to see what is it and what is it doing." and "for my apps always make a pipes before and after so I know where one app ends and other begins."
+**Status:** saved first; building in v3 (HoverCard kit: hover card and grey pipes).

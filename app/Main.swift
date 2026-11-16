@@ -22,6 +22,10 @@ final class Umbrella: NSObject, ObservableObject, NSMenuDelegate {
         for m in MODULES { on[m.id] = saved[m.id] ?? m.defaultOn }
         let menu = NSMenu(); menu.delegate = self; item.menu = menu
         item.button?.title = "MIDI"; item.button?.toolTip = "MIDI Tools (Mantra): MIDI to MK Control and MIDI to Key Stroke"
+        HoverCard.attach(to: item, autoPipe: true) { [weak self] in
+            guard let self = self else { return HoverCard.Content(name: "MIDI Tools (Mantra)", what: "", state: "") }
+            return HoverCard.Content(name: "MIDI Tools (Mantra)", what: "MIDI to MK Control and MIDI to Key Stroke", state: (self.on.values.contains(true) ? "ON" : "OFF"), stateColor: .systemGreen, lines: ["Modules on: " + (self.on.filter { $0.value }.keys.sorted().joined(separator: ", ")), "Modules off: " + (self.on.filter { !$0.value }.keys.sorted().joined(separator: ", "))])
+        }
         for m in MODULES where on[m.id]! && !SHOT { m.setOn(true) }   // --shot only draws: nothing runs
         let nc = NSWorkspace.shared.notificationCenter
         nc.addObserver(forName: NSWorkspace.didLaunchApplicationNotification, object: nil, queue: .main) { [weak self] n in
