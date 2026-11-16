@@ -30,3 +30,6 @@ changes: **https://mantramiditools.pages.dev/download/MIDITools.dmg**. Nobody ed
 ## State at close, 13.11.2026
 
 13.11.2026: audited against the Lua it replaces; first GitHub build of v2 (public repo); it now holds the MK Control (Mackie) and key-stroke engines the star used to load.
+
+## Menu-bar hover card and pipes (v3, 16.11.2026)
+Marko: "with all my apps on the menu bar, make a comprehensive pop-up menu. When I hover over, I want to see what is it and what is it doing." and "for my apps always make a pipes before and after so I know where one app ends and other begins." `app/HoverCard.swift` is the shared kit file (MANTRA_MANIFEST kits/menubar-hover, rule modules/menubar-hover.md): hovering the item about 0.4 s shows a card with name, what it is, state and live lines; a thin grey pipe stands before and after the visible title. The app supplies its lines in the `HoverCard.attach(...)` closure. Test without a mouse: launch with `--hovercard-shot`. Change the lines in the app; change the module only in the kit.
