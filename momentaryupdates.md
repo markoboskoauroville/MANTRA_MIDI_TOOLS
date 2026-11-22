@@ -42,3 +42,9 @@ Audit 13.11.2026 of mackie.lua + MANTRA_MACKIE (mackie, mcu, rules, blob, live) 
 
 16.11.2026 (Marko, 16.11.2026): "Please with all my apps on the menu bar, make a comprehensive pop-up menu. When I hover over, I want to see what is it and what is it doing." and "for my apps always make a pipes before and after so I know where one app ends and other begins."
 **Status:** saved first; building in v3 (HoverCard kit: hover card and grey pipes).
+
+## 22.11.2026 (Marko, via the Fable master session): the MIDI modules are shared
+
+> All the MIDI modules should only be actually in both places. We are sharing the modules. We can do that. So because they are shared modules, they also share the settings. It's the same thing, just in different views.
+
+**Status:** saved first; design sent to the master; building.
