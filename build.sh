@@ -10,8 +10,8 @@ V=$(sed -n 's/^let VERSION = \([0-9]*\)/\1/p' app/Common.swift)
 NAME="MIDI Tools (Mantra)"
 APP="build/$NAME.app"
 rm -rf "$APP"; mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
-swiftc -O -swift-version 5 -parse-as-library -target arm64-apple-macos14.0 -o build/MidiTools-arm64 app/*.swift
-swiftc -O -swift-version 5 -parse-as-library -target x86_64-apple-macos14.0 -o build/MidiTools-x86_64 app/*.swift
+swiftc -O -swift-version 5 -parse-as-library -target arm64-apple-macos14.0 -o build/MidiTools-arm64 app/*.swift shared/*.swift
+swiftc -O -swift-version 5 -parse-as-library -target x86_64-apple-macos14.0 -o build/MidiTools-x86_64 app/*.swift shared/*.swift
 lipo -create build/MidiTools-arm64 build/MidiTools-x86_64 -output "$APP/Contents/MacOS/MantraMidiTools"
 (cd icon && swift make_icon.swift "$V" >/dev/null)
 I=build/AppIcon.iconset; rm -rf $I; mkdir -p $I

@@ -19,14 +19,27 @@ final class Umbrella: NSObject, ObservableObject, NSMenuDelegate {
         super.init()
         MODULES = [MackieModule(), MidiKeysModule()]
         let saved = SETTINGS.read()["modules"] as? [String: Bool] ?? [:]
-        for m in MODULES { on[m.id] = saved[m.id] ?? m.defaultOn }
+        let shared = MidiShared.load()        // the MIDI modules' on / off is ONE state for both apps (MANTRA_MIDI_MODULES)
+        for m in MODULES { on[m.id] = shared[m.id] ?? saved[m.id] ?? m.defaultOn }
         let menu = NSMenu(); menu.delegate = self; item.menu = menu
         item.button?.title = "MIDI"; item.button?.toolTip = "MIDI Tools (Mantra): MIDI to MK Control and MIDI to Key Stroke"
         HoverCard.attach(to: item, autoPipe: true) { [weak self] in
             guard let self = self else { return HoverCard.Content(name: "MIDI Tools (Mantra)", what: "", state: "") }
             return HoverCard.Content(name: "MIDI Tools (Mantra)", what: "MIDI to MK Control and MIDI to Key Stroke", state: (self.on.values.contains(true) ? "ON" : "OFF"), stateColor: .systemGreen, lines: ["Modules on: " + (self.on.filter { $0.value }.keys.sorted().joined(separator: ", ")), "Modules off: " + (self.on.filter { !$0.value }.keys.sorted().joined(separator: ", "))])
         }
-        for m in MODULES where on[m.id]! && !SHOT { m.setOn(true) }   // --shot only draws: nothing runs
+        // --shot only draws: nothing runs. The engines are started by MidiHost, in the owner process only.
+        if !SHOT {
+            MidiHost.shared.onChange = { [weak self] in
+                guard let self = self else { return }
+                for id in MidiShared.ids { self.on[id] = MidiHost.shared.on[id] ?? true }
+                self.rebindKeys(); self.paint()
+            }
+            MidiHost.shared.start(app: APP_NAME, mods: MODULES.compactMap { m in
+                if let k = m as? MackieModule { return MidiHost.Mod(id: k.id, setOn: { k.setOn($0) }, reload: { k.engine.load() }) }
+                if let k = m as? MidiKeysModule { return MidiHost.Mod(id: k.id, setOn: { k.setOn($0) }, reload: { k.engine.load() }) }
+                return nil
+            }, log: { AppLog.write($0) })
+        }
         let nc = NSWorkspace.shared.notificationCenter
         nc.addObserver(forName: NSWorkspace.didLaunchApplicationNotification, object: nil, queue: .main) { [weak self] n in
             guard (n.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication)?.bundleIdentifier == BUNDLE else { return }
@@ -44,8 +57,7 @@ final class Umbrella: NSObject, ObservableObject, NSMenuDelegate {
         rebindKeys(); paint()
     }
     func setModule(_ id: String, _ v: Bool) {
-        on[id] = v; SETTINGS.change { $0["modules"] = self.on }
-        MODULES.first { $0.id == id }?.setOn(v)
+        MidiHost.shared.setOn(id, v); on[id] = v   // shared: the host starts or stops the engine in the owner process
         rebindKeys(); paint()
     }
     func rebindKeys() { HotKeys.shared.set(MODULES.filter { on[$0.id]! }.flatMap { $0.hotkeys() }) }
@@ -84,6 +96,7 @@ struct ModuleSection: View {
                 Text(m.status()).font(.system(size: 13, weight: .bold, design: .monospaced)).foregroundColor(AMBER)
             }
             Small(text: m.about)
+            if let l = MidiHost.shared.line { Text(l).font(.system(size: 12, weight: .bold, design: .monospaced)).foregroundColor(AMBER) }
             if u.on[m.id]! { m.settingsView() }
         }
     }
@@ -125,15 +138,14 @@ struct SettingsView: View {
         // (applicationWillTerminate) and quits. ✕ closes the window only.
         HStack(spacing: 0) {
             Text("MIDI TOOLS (MANTRA)").font(.system(size: 12, weight: .bold, design: .monospaced)).foregroundColor(.white).padding(.trailing, 6)
-            Word(text: "ON", on: true) {}
-            Word(text: "OFF", on: false, action: { NSApp.terminate(nil) }, id: "off")
             Spacer()
             Text("v\(VERSION)").font(.system(size: 11, design: .monospaced)).foregroundColor(GREY).padding(.trailing, 8)
+                .onTapGesture { NSWorkspace.shared.open(URL(string: RELEASES)!) }.help("the page of the app")
             // v18, TOP (Marko, 31.10.2026: "On, off and top. Please build it in every application.")
             Word(text: "TOP", on: onTop, action: { onTop.toggle(); floatWindows(onTop) }, id: "top")
                 .help("Always on top: green, the window stays above every other window")
             PermissionsWord()                           // v16: only while a permission is missing (Permissions.swift)
-            CloseX()
+            CloseX(action: { NSApp.terminate(nil) }, label: "Quit app", help: "quit the app (no ON / OFF button: the window's ✕ quits)")
         }
         .padding(.leading, 24).padding(.trailing, 10).padding(.vertical, 8)
         Divider()
@@ -153,7 +165,6 @@ struct SettingsView: View {
                     Text(liveApp() == nil ? "NOT RUNNING" : "RUNNING").font(.system(size: 13, weight: .bold, design: .monospaced)).foregroundColor(liveApp() == nil ? GREY : GREEN)
                 }
                 if let m = MODULES.first(where: { $0.id == u.tab }) ?? MODULES.first { ModuleSection(u: u, m: m) }
-                HStack { Spacer(); Text("v\(VERSION)").font(.system(size: 11, design: .monospaced)).foregroundColor(GREY).onTapGesture { NSWorkspace.shared.open(URL(string: RELEASES)!) } }
                 Text("© 2026 Mantra Productions").font(.system(size: 11)).foregroundColor(GREY).frame(maxWidth: .infinity, alignment: .center)
             }
             .frame(width: max(200, g.size.width - 48), alignment: .leading)
@@ -164,7 +175,7 @@ struct SettingsView: View {
         }
         .frame(minWidth: 640, idealWidth: 820, maxWidth: .infinity, minHeight: 480, idealHeight: 820, maxHeight: .infinity)
         .background(INK).preferredColorScheme(.dark)
-        .onAppear { DispatchQueue.main.async { floatWindows(onTop) } }
+        .onAppear { DispatchQueue.main.async { floatWindows(onTop); enforceOneTitle() } }
     }
 }
 
@@ -172,20 +183,20 @@ struct SettingsView: View {
 let UMBRELLA = Umbrella()
 
 final class Delegate: NSObject, NSApplicationDelegate {
-    func applicationDidFinishLaunching(_ n: Notification) { _ = UMBRELLA }
+    func applicationDidFinishLaunching(_ n: Notification) { _ = UMBRELLA; watchOneTitle(); AppLog.write("started (pid \(ProcessInfo.processInfo.processIdentifier))"); Updater.checkAtStart() }   // asks to update at start (kit mac-updater)
     func applicationShouldTerminateAfterLastWindowClosed(_ s: NSApplication) -> Bool { false }
     // the star's open of a running app is a reopen: the window comes back (made again by the WindowGroup if closed)
     func applicationShouldHandleReopen(_ s: NSApplication, hasVisibleWindows: Bool) -> Bool {
         if !hasVisibleWindows, let w = s.windows.first(where: { $0.isMiniaturized }) { w.deminiaturize(nil); return false }
         return true
     }
-    func applicationWillTerminate(_ n: Notification) { for m in MODULES { m.setOn(false) } }
+    func applicationWillTerminate(_ n: Notification) { AppLog.write("quit"); MidiHost.shared.shutdown() }
 }
 
 struct AbletonLiveActions: App {
     @NSApplicationDelegateAdaptor(Delegate.self) var delegate
     var body: some Scene {
-        WindowGroup("MIDI Tools (Mantra)") { SettingsView(u: UMBRELLA) }
+        WindowGroup(APP_NAME) { SettingsView(u: UMBRELLA) }
             .windowResizability(.contentMinSize).defaultSize(width: 820, height: 820)
     }
 }

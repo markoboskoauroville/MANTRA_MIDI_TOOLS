@@ -4,7 +4,9 @@ import SwiftUI
 import AppKit
 import Carbon.HIToolbox
 
-let VERSION = 3
+let VERSION = 4
+let APP_NAME = "MIDI Tools (Mantra)"
+let APP_SOURCE_DIR = "MANTRA_MIDI_TOOLS"   // its folder under ~/Developer (the shared MIDI modules look for helpers there)
 let RELEASES = "https://mantramiditools.pages.dev"
 let BUNDLE = "com.ableton.live"
 let PYTHON = NSHomeDirectory() + "/.pyenv/versions/3.10.14/bin/python3"
@@ -46,20 +48,67 @@ extension View {
 // window stays above every other window; remembered in UserDefaults "onTop" and applied at launch
 func floatWindows(_ on: Bool) {
     for w in NSApp.windows where w.title.hasPrefix("MIDI Tools (Mantra)") { w.level = on ? .floating : .normal }
+    enforceOneTitle()
+}
+// ONE TITLE ONLY (Marko, 15.11.2026; MANTRA_MANIFEST modules/one-title-only.md): the window draws its own title in the
+// first row, so the system title stays hidden in every state. Called after creation, from every window notification
+// (key, resign, resize, full screen in and out, minimise) and after TOP. The window.title stays set (Mission Control,
+// Accessibility), never drawn; any title text field AppKit keeps in the title bar (the faded echo) is hidden too.
+func enforceOneTitle() {
+    for w in NSApp.windows where !(w is NSPanel) && w.title.hasPrefix(APP_NAME) {
+        w.titleVisibility = .hidden
+        w.titlebarAppearsTransparent = true
+        func walk(_ v: NSView) {
+            if v === w.contentView { return }
+            if let t = v as? NSTextField, t.stringValue == APP_NAME { t.isHidden = true; t.alphaValue = 0 }
+            v.subviews.forEach(walk)
+        }
+        if let frame = w.contentView?.superview { walk(frame) }
+    }
+}
+func watchOneTitle() {
+    let nc = NotificationCenter.default
+    for n in [NSWindow.didBecomeKeyNotification, NSWindow.didResignKeyNotification, NSWindow.didResizeNotification,
+              NSWindow.didEnterFullScreenNotification, NSWindow.didExitFullScreenNotification, NSWindow.didDeminiaturizeNotification,
+              NSWindow.didMoveNotification] {
+        nc.addObserver(forName: n, object: nil, queue: .main) { _ in enforceOneTitle() }
+    }
+    DispatchQueue.main.async { enforceOneTitle() }
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { enforceOneTitle() }
+}
+// THE APP'S OWN LOG (a silent app is a finding): ~/Library/Logs/Ableton Live Assistant (Mantra)/app.log, one line per
+// event: the Space decisions and A1's status lines ("A1: Space: ..."), the updater ("[Updater] ..."), start and quit.
+// Over 1 MB it is moved to app.log.1.
+enum AppLog {
+    static let dir = NSHomeDirectory() + "/Library/Logs/" + APP_NAME
+    static let file = dir + "/app.log"
+    private static let q = DispatchQueue(label: "applog")
+    static func write(_ s: String) {
+        let line = ISO8601DateFormatter().string(from: Date()) + " v\(VERSION) " + s + "\n"
+        q.async {
+            let fm = FileManager.default
+            try? fm.createDirectory(atPath: dir, withIntermediateDirectories: true)
+            if let a = try? fm.attributesOfItem(atPath: file), (a[.size] as? Int ?? 0) > 1_000_000 { try? fm.removeItem(atPath: file + ".1"); try? fm.moveItem(atPath: file, toPath: file + ".1") }
+            if !fm.fileExists(atPath: file) { fm.createFile(atPath: file, contents: nil) }
+            if let h = FileHandle(forWritingAtPath: file) { h.seekToEndOfFile(); h.write(Data(line.utf8)); try? h.close() }
+        }
+    }
 }
 // ✕, the window's close at its far upper-right corner (Marko, 19.10.2026: "please unify the position of the close
 // button on every application. It's far upper right corner. There is X to close the dialog in every dialog, same").
 // It closes its own window (or, given an action, its dialog); the app stays on.
 struct CloseX: View {
     var action: (() -> Void)? = nil
+    var label = "Close window"
+    var help = "close this window; the app stays on"
     @State private var window: NSWindow?
     var body: some View {
         Image(systemName: "xmark").font(.system(size: 14, weight: .bold)).foregroundColor(GREY)
             .frame(width: 28, height: 28).contentShape(Rectangle())
             .background(WindowReader { window = $0 })
             .onTapGesture { if let a = action { a() } else { (window ?? NSApp.keyWindow)?.performClose(nil) } }
-            .axButton("Close window", id: "close") { if let a = action { a() } else { (window ?? NSApp.keyWindow)?.performClose(nil) } }
-            .help("close this window; the app stays on")
+            .axButton(label, id: "close") { if let a = action { a() } else { (window ?? NSApp.keyWindow)?.performClose(nil) } }
+            .help(help)
     }
 }
 struct WindowReader: NSViewRepresentable {

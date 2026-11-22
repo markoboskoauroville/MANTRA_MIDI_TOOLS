@@ -16,6 +16,17 @@ jobs:
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: Shared MIDI modules - same sources as the other app (hash) and their tests
+        run: |
+          H=$(ls shared/*.swift | sort | xargs cat | shasum -a 256 | cut -d' ' -f1)
+          echo "shared sources: $H"
+          [ "$H" = "$(cat shared.sha256)" ] || { echo "FAIL: shared/ differs from shared.sha256"; exit 1; }
+          mkdir -p "$RUNNER_TEMP/st" && cp shared/SharedPure.swift "$RUNNER_TEMP/st/" && cp shared/tests/shared_test.swift "$RUNNER_TEMP/st/main.swift"
+          swiftc -o "$RUNNER_TEMP/shared_test" "$RUNNER_TEMP/st/SharedPure.swift" "$RUNNER_TEMP/st/main.swift" && "$RUNNER_TEMP/shared_test"
+      - name: Pins
+        run: bash tests/pins.sh
       - name: Build
         run: SIGN=- NO_INSTALL=1 ./build.sh --no-publish
       - name: Pack

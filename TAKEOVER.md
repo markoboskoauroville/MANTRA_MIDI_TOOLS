@@ -33,3 +33,14 @@ changes: **https://mantramiditools.pages.dev/download/MIDITools.dmg**. Nobody ed
 
 ## Menu-bar hover card and pipes (v3, 16.11.2026)
 Marko: "with all my apps on the menu bar, make a comprehensive pop-up menu. When I hover over, I want to see what is it and what is it doing." and "for my apps always make a pipes before and after so I know where one app ends and other begins." `app/HoverCard.swift` is the shared kit file (MANTRA_MANIFEST kits/menubar-hover, rule modules/menubar-hover.md): hovering the item about 0.4 s shows a card with name, what it is, state and live lines; a thin grey pipe stands before and after the visible title. The app supplies its lines in the `HoverCard.attach(...)` closure. Test without a mouse: launch with `--hovercard-shot`. Change the lines in the app; change the module only in the kit.
+
+## v4, 22.11.2026: the MIDI modules are shared with Ableton Live Assistant (Mantra)
+
+Marko, 22.11.2026: "All the MIDI modules should only be actually in both places. We are sharing the modules ... they also share the settings. It's the same
+thing, just in different views." The two modules now come from the public repo MANTRA_MIDI_MODULES (git submodule `shared/`, pinned; `shared.sha256`
+checked by the workflow): one source for both apps, one on / off state `~/.config/mantra-midi-modules.json` (made from the old `midi-tools.json` and
+`live-actions.json` keys), one engine (owner lock `~/.config/mantra-midi-owner.lock`): the app that is not the owner is a view and says
+"runs in <the other app>". Alone, it owns the engines and shows no line. Same version, from the manifest's rules for an app's next update: the
+updater at start (`app/Updater.swift`), no app ON / OFF (the window's ✕ quits), the version once, the title once (`enforceOneTitle`), the app's log in
+~/Library/Logs/MIDI Tools (Mantra)/app.log. The download page is made from the release: `app.zip` of the workflow, signed "Mantra Apps",
+`tools/make_dmg.sh` and `tools/deploy_site.sh` (no local build).

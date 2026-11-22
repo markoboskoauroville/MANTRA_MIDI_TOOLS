@@ -1,0 +1,3 @@
+[submodule "shared"]
+	path = shared
+	url = https://github.com/markoboskoauroville/MANTRA_MIDI_MODULES
