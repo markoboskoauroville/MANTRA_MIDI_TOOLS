@@ -47,4 +47,4 @@ Audit 13.11.2026 of mackie.lua + MANTRA_MACKIE (mackie, mcu, rules, blob, live) 
 
 > All the MIDI modules should only be actually in both places. We are sharing the modules. We can do that. So because they are shared modules, they also share the settings. It's the same thing, just in different views.
 
-**Status:** saved first; design sent to the master; building.
+**Status:** v4 built by GitHub, installed, proven with Ableton Live Assistant v26; page offers v4.

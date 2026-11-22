@@ -14,3 +14,9 @@
 
 ## Lesson: hover card and pipes (16.11.2026)
 Poll the mouse (macOS draws a status item once per display, only one copy owns the button, so a tracking area misses the other display). The panel needs `titleVisibility = .hidden` for the one-title guard. A non-activating NSPanel at statusBar+1 never takes focus. Pipes for text items: attributed title; for icon items: pipedIcon + rightPipe; for view items: drawPipes or PipesView.
+
+## 22.11.2026 (v4): shared modules
+Two copies of one module in two apps drift and both grab the same MIDI sources: one source (public repo MANTRA_MIDI_MODULES as a submodule, pinned,
+hash-checked in both workflows), one on / off state, one owner lock (flock: the kernel frees it when the owner dies). Proven on the Mac: both apps
+running, one owner; a switch pressed in the view app stopped the engine in the owner within a second; the owner quit and the other took over in a
+second; the owner back as a view said "runs in ...". The website text must follow: "settings stay in midi-tools.json" was no longer true.
