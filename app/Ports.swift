@@ -4,12 +4,12 @@
 //
 //     let port = Ports.claim("myapp", 8962)                // a server: its usual port, or the next free one
 //     let base = Ports.url("voice", fallback: 8837)        // a client: the live server, or the usual number
-//     let (ok, who) = Ports.own("abletonosc-answers", 11001, udp: true)   // a FIXED port: one owner only
+//     let (ok, who) = Ports.own("abletonosc-answers", 11011, udp: true)   // a FIXED port: one owner only
 //
 // Marko, 27.10.2026: "There must be some kind of automatic assignment of the port as central service for all my star
 // applications so there is no clashing of the ports never." A new app takes its number from `mantra-ports next`,
 // claims it at start, and every client asks for the name. A fixed port (decided by another program, like
-// AbletonOSC's 11001) is never "the next free one": its owner says `own`, and an app that is refused uses the owner's
+// AbletonOSC's 11011) is never "the next free one": its owner says `own`, and an app that is refused uses the owner's
 // router instead (`mantra-ports check` names it).
 import Foundation
 import Darwin
@@ -32,7 +32,7 @@ enum Ports {
 
     // is the port there for the taking? asked by binding it, the only honest test. TCP: with SO_REUSEADDR (a port in
     // TIME_WAIT after its own server stopped is free: MANTRA_MANIFEST ports.md §1) and nothing may answer on it. UDP: on
-    // every address without SO_REUSEADDR (with it, 127.0.0.1:11001 binds beside *:11001: found 27.10.2026).
+    // every address without SO_REUSEADDR (with it, 127.0.0.1:11011 binds beside *:11011: found 27.10.2026).
     static func free(_ port: UInt16, udp: Bool = false) -> Bool {
         let s = socket(AF_INET, udp ? SOCK_DGRAM : SOCK_STREAM, 0)
         guard s >= 0 else { return false }

@@ -20,3 +20,6 @@ Two copies of one module in two apps drift and both grab the same MIDI sources: 
 hash-checked in both workflows), one on / off state, one owner lock (flock: the kernel frees it when the owner dies). Proven on the Mac: both apps
 running, one owner; a switch pressed in the view app stopped the engine in the owner within a second; the owner quit and the other took over in a
 second; the owner back as a view said "runs in ...". The website text must follow: "settings stay in midi-tools.json" was no longer true.
+
+## 23.11.2026 (v5): AbletonOSC ports
+AbletonOSC moved to UDP 11010/11011 (23.11.2026), Suno Bridge owns 11000. Shared MackieIO.swift and app/Ports.swift follow.

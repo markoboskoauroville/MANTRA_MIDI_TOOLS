@@ -4,7 +4,7 @@ import SwiftUI
 import AppKit
 import Carbon.HIToolbox
 
-let VERSION = 4
+let VERSION = 5
 let APP_NAME = "MIDI Tools (Mantra)"
 let APP_SOURCE_DIR = "MANTRA_MIDI_TOOLS"   // its folder under ~/Developer (the shared MIDI modules look for helpers there)
 let RELEASES = "https://mantramiditools.pages.dev"
