@@ -8,7 +8,7 @@ or the Mac's own volume).
 Marko, 31.10.2026: *"make another application called MIDI Tools (Mantra) ... make it now independent. It's called MIDI to
 MKEY Protocol, one application, and the other is MIDI to Keyboard."* ("MKEY" = MK Control, Mackie Control.)
 
-- **Website:** https://mantramiditools.pages.dev (`site/public`, `tools/deploy_site.sh`): download with counter
+- **Website:** https://miditools.markobosko.org (`site/public`, `tools/deploy_site.sh`): download with counter
   (`data-dl-app="miditools"`), install steps (Open Anyway; IAC Driver + Live's MackieControl surface; AbletonOSC
   optional), the donation bowl, visits, Speechify keys.
 - **Build:** `./build.sh` (Apple Silicon + Intel, signed "Mantra Apps", installs to /Applications), `tools/make_dmg.sh`
